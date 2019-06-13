@@ -255,7 +255,7 @@ $(() => {
   };
 
   const makeDiffCount = (diff, propertyName, cssName) => {
-    if (!diffCheckBox().is(':checked')) {
+    if (!diffCheckBox().is(':checked') || isOutputFilename(diff.filename)) {
       return '';
     }
     const count = diff[propertyName];
@@ -276,12 +276,17 @@ $(() => {
 
   // - - - - - - - - - - - - - - - - - - - - - - - -
 
+  const outputFilenames = ['stdout','stderr','status'];
+
+  const isOutputFilename = (filename) => {
+    return outputFilenames.includes(filename);
+  };
+
   const sortedDiffs = (diffs) => {
-    const outputFilenames = ['stdout','stderr','status'];
     let filenames = [];
     $.each(diffs, (_, diff) => {
       const filename = diff.filename;
-      if (!outputFilenames.includes(filename)) {
+      if (!isOutputFilename(filename)) {
         filenames.push(filename);
       }
     });

@@ -86,7 +86,7 @@
 
   #diff-filenames {
 
-    @include right-align(0px);
+    @include left-align(20px);
     height: 490px;
     margin: { top: 5px; }
 

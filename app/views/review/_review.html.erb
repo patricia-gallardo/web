@@ -222,7 +222,7 @@ $(() => {
   const makeDiffFilenames = (diffs) => {
     // align-right is for diff toggling added/deleted line counts
     return '' +
-      '<table align="right">' +
+      '<table align="left">' +
         '<tr>' +
             makeTd(makeDiffDeletedCountColumn(diffs)) +
             makeTd(makeDiffAddedCountColumn(diffs)) +

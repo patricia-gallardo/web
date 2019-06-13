@@ -221,7 +221,7 @@ $(() => {
 
   const makeDiffFilenames = (diffs) => {
     let html = '';
-    html += '<table align="left">';
+    html += '<table>';
     $.each(sortedDiffs(diffs), (_, diff) => {
       html += '<tr>';
       html += makeTd(makeDiffDeletedCount(diff));

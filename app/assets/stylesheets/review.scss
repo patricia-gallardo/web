@@ -86,7 +86,7 @@
 
   #diff-filenames {
 
-    @include left-align(20px);
+    @include left-align(30px);
     height: 500px;
 
     // make scrollbars invisible
@@ -100,10 +100,16 @@
     border-bottom-right-radius: 5px;
 
     .filename {
-       height: 20px;
-      padding: { left: 3px; top: 0px; bottom: 0px; }
-       border: none; //0px solid $darker-color;
-       margin: { top: 0px; bottom: 0px; }
+          height: 20px;
+
+        &::-webkit-scrollbar:horizontal { height: 0px; }
+           width: 220px;
+       max-width: 220px;
+
+      overflow-x: auto;
+         padding: { left: 3px; top: 0px; bottom: 0px; }
+          border: none;
+          margin: { top: 0px; bottom: 0px; }
       // mimic test-page filename-list
       &[data-filename='stdout'] { margin-top: 10px; }
       &[data-filename='status'] { margin-bottom: 10px; }

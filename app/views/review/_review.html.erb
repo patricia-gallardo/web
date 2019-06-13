@@ -236,12 +236,12 @@ $(() => {
   // - - - - - - - - - - - - - - - - - - - - - - - -
 
   const makeDiffFilename = (diff) => {
-    return $('<div>', {
+    return outerHTML($('<div>', {
         'class': 'filename',
         'data-filename': diff.filename,
         'id': `radio_${diff.id}`,
         'text': diff.filename
-    }).get(0).outerHTML;
+    }));
   };
 
   // - - - - - - - - - - - - - - - - - - - - - - - -
@@ -265,7 +265,13 @@ $(() => {
       'data-filename': diff.filename
     });
     div.append(count);
-    return div.get(0).outerHTML;
+    return outerHTML(div);
+  };
+
+  // - - - - - - - - - - - - - - - - - - - - - - - -
+
+  const outerHTML = (element) => {
+    return element.get(0).outerHTML;
   };
 
   // - - - - - - - - - - - - - - - - - - - - - - - -

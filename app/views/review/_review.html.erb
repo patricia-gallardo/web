@@ -220,33 +220,14 @@ $(() => {
   // - - - - - - - - - - - - - - - - - - - - - - - -
 
   const makeDiffFilenames = (diffs) => {
-    // align-right is for diff toggling added/deleted line counts
-    return '' +
-      '<table align="left">' +
-        '<tr>' +
-            makeTd(makeDiffDeletedCountColumn(diffs)) +
-            makeTd(makeDiffAddedCountColumn(diffs)) +
-            makeTd(makeDiffFilenamesColumn(diffs)) +
-        '</tr>' +
-      '</table>';
-  };
-
-  // - - - - - - - - - - - - - - - - - - - - - - - -
-
-  const makeDiffFilenamesColumn = (diffs) => {
     let html = '';
-    html += '<table>';
+    html += '<table align="left">';
     $.each(sortedDiffs(diffs), (_, diff) => {
-      const td = $('<td>');
-      const filenameDiv =
-        $('<div>', {
-            'class': 'filename',
-            'data-filename': diff.filename,
-            'id': `radio_${diff.id}`,
-            'text': diff.filename
-        });
-      td.append(filenameDiv);
-      html += makeTr(td.html());
+      html += '<tr>';
+      html += makeTd(makeDiffDeletedCount(diff));
+      html += makeTd(makeDiffAddedCount(diff));
+      html += makeTd(makeDiffFilename(diff));
+      html += '</tr>';
     });
     html += '</table>';
     return html;
@@ -254,41 +235,43 @@ $(() => {
 
   // - - - - - - - - - - - - - - - - - - - - - - - -
 
-  const makeDiffDeletedCountColumn = (diffs) => {
-    return makeDiffCountColumn(diffs, 'deleted_line_count', 'deleted');
+  const makeDiffFilename = (diff) => {
+    return $('<div>', {
+        'class': 'filename',
+        'data-filename': diff.filename,
+        'id': `radio_${diff.id}`,
+        'text': diff.filename
+    }).get(0).outerHTML;
   };
 
-  const makeDiffAddedCountColumn = (diffs) => {
-    return makeDiffCountColumn(diffs, 'added_line_count', 'added');
+  // - - - - - - - - - - - - - - - - - - - - - - - -
+
+  const makeDiffDeletedCount = (diff) => {
+    return makeDiffCount(diff, 'deleted_line_count', 'deleted');
   };
 
-  const makeDiffCountColumn = (diffs, propertyName, cssName) => {
-    let html = '';
+  const makeDiffAddedCount = (diff) => {
+    return makeDiffCount(diff, 'added_line_count', 'added');
+  };
+
+  const makeDiffCount = (diff, propertyName, cssName) => {
     if (!diffCheckBox().is(':checked')) {
-      return html;
+      return '';
     }
-    html += '<table>';
-    $.each(sortedDiffs(diffs), (_, diff) => {
-      const count = diff[propertyName];
-      const td = $('<td>');
-      const noneOrSome = (count === 0) ? 'none' : 'some';
-      const div = $('<div>', {
-        'class': `diff-${cssName}-line-count ${noneOrSome} button`,
-        'data-filename': diff.filename
-      });
-      div.append(count);
-      td.append(div);
-      html += makeTr(td.html());
+    const count = diff[propertyName];
+    const noneOrSome = (count === 0) ? 'none' : 'some';
+    const div = $('<div>', {
+      'class': `diff-${cssName}-line-count ${noneOrSome} button`,
+      'data-filename': diff.filename
     });
-    html += '</table>';
-    return html;
+    div.append(count);
+    return div.get(0).outerHTML;
   };
 
   // - - - - - - - - - - - - - - - - - - - - - - - -
-
-  const outputFilenames = ['stdout','stderr','status'];
 
   const sortedDiffs = (diffs) => {
+    const outputFilenames = ['stdout','stderr','status'];
     let filenames = [];
     $.each(diffs, (_, diff) => {
       const filename = diff.filename;

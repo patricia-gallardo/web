@@ -58,9 +58,9 @@ class Runner
 
   def files_from(params)
     files = cleaned_files(params[:file_content])
-    output_filenames.each do |output_filename|
-      files.delete(output_filename)
-    end
+    #output_filenames.each do |output_filename|
+    #  files.delete(output_filename)
+    #end
     files.map do |filename,content|
       [filename, {
         'content' => sanitized(content)

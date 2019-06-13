@@ -292,7 +292,7 @@ $(() => {
       filenames.push(diff.filename);
     });
     // ensure filenames appear in the same order as kata/edit page
-    const sorted = cd.sortedFilenames(filenames);
+    const sorted = ['stdout','stderr','status'].concat(cd.sortedFilenames(filenames));
     const diffFor = (filename) => {
       for (let i = 0; i !== diffs.length; i++) {
         if (diffs[i].filename === filename) {

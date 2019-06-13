@@ -2,7 +2,13 @@
 class DifferController < ApplicationController
 
   def diff
-    diff = differ.diff(was_files, now_files)
+    wf = was_files
+    nf = now_files
+    # ensure sss show no diff 
+    wf['stdout'] = nf['stdout']
+    wf['stderr'] = nf['stderr']
+    wf['status'] = nf['status']
+    diff = differ.diff(wf, nf)
     view = diff_view(diff)
 
     render json: {

@@ -9,20 +9,20 @@ class KataController < ApplicationController
   def edit
     mapped_id {
       @title = 'kata:' + kata.id
-      @files = kata.files(:with_output)
+      @files = kata.files
     }
   end
 
   def run_tests
     t1 = time_now
 
-    @stdout,@stderr,@status,colour,
+    stdout,stderr,status,colour,
       files,@created,@deleted,@changed = kata.run_tests(params)
 
     t2 = time_now
     duration = Time.mktime(*t2) - Time.mktime(*t1)
     index = params[:index].to_i + 1
-    kata.ran_tests(index, files, t1, duration, @stdout, @stderr, @status, colour)
+    kata.ran_tests(index, files, t1, duration, stdout, stderr, status, colour)
 
     @light = Event.new(self, kata, { 'time' => t1, 'colour' => colour }, index)
     @id = kata.id

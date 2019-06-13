@@ -29,16 +29,6 @@ const updateTrafficLightPieChart = () => {
 
 //- - - - - - - - - - - - - - - - - - - - - -
 
-const updateOutput = () => {
-  const colour = "<%= @light.colour %>";
-  const stdout = "<%= j raw(@stdout['content']) %>";
-  const stderr = "<%= j raw(@stderr['content']) %>";
-  const status = "<%= j raw(@status.to_s) %>";
-  cd.loadTestOutputFiles(colour, stdout, stderr, status);
-};
-
-//- - - - - - - - - - - - - - - - - - - - - -
-
 const insertCreatedFiles = () => {
   <% @created.each do |filename,file| %>
     cd.fileCreate("<%= j raw(filename) %>", {
@@ -67,7 +57,7 @@ const updateChangedFiles = () => {
 
 //- - - - - - - - - - - - - - - - - - - - - -
 
-const warnIfTestsTimedOut = () => {
+const DEAD_warnIfTestsTimedOut = () => {
   if ("<%= @light.colour %>" === 'timed_out') {
     const maxSeconds = $('input[name="max_seconds"]').val();
     const info = [
@@ -89,12 +79,11 @@ appendTestTrafficLight();
 updateTrafficLightCount();
 updateTrafficLightPieChart();
 updateEventIndex();
-updateOutput();
 insertCreatedFiles();
 removeDeletedFiles();
 updateChangedFiles();
 
-warnIfTestsTimedOut();
+//warnIfTestsTimedOut();
 //warnIfTruncatedFiles();
 
 cd.scrollLastTrafficLightIntoView();

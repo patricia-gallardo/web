@@ -31,26 +31,7 @@ var cyberDojo = (function(cd, $) {
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  cd.loadTestOutputFiles = (colour, stdout, stderr, status) => {
-    cd.fileChange('stdout', { content: stdout });
-    cd.fileChange('stderr', { content: stderr });
-    cd.fileChange('status', { content: status });
-    if (colour === 'timed_out') {
-      cd.loadFile('status'); // timed-out: status == '137'
-    }
-    else if (stdout.length > stderr.length) {
-      cd.loadFile('stdout');
-    }
-    else {
-        cd.loadFile('stderr');
-    }
-  };
-
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   cd.currentFilename = () => theCurrentFilename;
-
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   cd.eachFilename = (f) => cd.filenames().forEach(f);
 
@@ -76,8 +57,7 @@ var cyberDojo = (function(cd, $) {
     // Used in two places
     // 1. kata/edit page to help show filename-list
     // 2. review/show page/dialog to help show filename-list
-    const output = ['stdout','stderr','status'];
-    return [].concat(hiFilenames(filenames), output, loFilenames(filenames));
+    return [].concat(hiFilenames(filenames), loFilenames(filenames));
   };
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -118,11 +98,11 @@ var cyberDojo = (function(cd, $) {
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   cd.toggleOutputFile = () => {
-    if (cd.isOutputFile(cd.currentFilename())) {
-      cd.loadFile(theLastNonOutputFilename);
-    } else {
-      cd.loadFile(theLastOutputFilename);
-    }
+    //if (cd.isOutputFile(cd.currentFilename())) {
+    //  cd.loadFile(theLastNonOutputFilename);
+    //} else {
+    //  cd.loadFile(theLastOutputFilename);
+    //}
   };
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -281,16 +261,22 @@ var cyberDojo = (function(cd, $) {
   };
 
   const cantBeRenamedOrDeleted = (filename) => {
-    return cd.isOutputFile(filename) || filename == 'cyber-dojo.sh';
+    return filename == 'cyber-dojo.sh';
   };
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   const rebuildFilenameList = () => {
-    const filenameList = $('#filename-list');
-    filenameList.empty();
-    $.each(cd.sortedFilenames(cd.filenames()), (_, filename) => {
-      filenameList.append(makeFileListEntry(filename));
+    const all = cd.filenames();
+    const hiFilenameList = $('#hi-filename-list');
+    hiFilenameList.empty();
+    $.each(hiFilenames(all), (_, filename) => {
+      hiFilenameList.append(makeFileListEntry(filename));
+    });
+    const loFilenameList = $('#lo-filename-list');
+    loFilenameList.empty();
+    $.each(loFilenames(all), (_, filename) => {
+      loFilenameList.append(makeFileListEntry(filename));
     });
   };
 
@@ -331,13 +317,11 @@ var cyberDojo = (function(cd, $) {
     // 3. review/show page/dialog to help show filename list
     let hi = [];
     $.each(filenames, (_, filename) => {
-      if (isSourceFile(filename) || isReadmeFile(filename)) {
+      if (isSourceFile(filename)) {
         hi.push(filename);
       }
     });
     hi.sort();
-    hi = hi.filter(filename => !cd.isOutputFile(filename));
-    hi = hi.filter(filename => filename !== 'cyber-dojo.sh');
     return hi;
   };
 
@@ -352,12 +336,11 @@ var cyberDojo = (function(cd, $) {
     // 3. review/show page/dialog to help show filename-list
     let lo = [];
     $.each(filenames, (_, filename) => {
-      if (!isSourceFile(filename) && !isReadmeFile(filename)) {
+      if (!isSourceFile(filename)) {
         lo.push(filename);
       }
     });
     lo.sort();
-    lo = lo.filter(filename => !cd.isOutputFile(filename));
     return lo;
   };
 
@@ -377,18 +360,12 @@ var cyberDojo = (function(cd, $) {
     $.each(cd.extensionFilenames(), (_, extension) => {
       // Shell test frameworks (eg shunit2) use .sh as their
       // filename extension but we don't want cyber-dojo.sh
-      // in the hiFilenames() above output in the filename-list.
+      // in the hiFilenames().
       if (filename.endsWith(extension) && filename !== 'cyber-dojo.sh') {
         match = true;
       }
     });
     return match;
-  };
-
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  const isReadmeFile = (filename) => {
-      return filename === 'readme.txt' || filename === 'instructions';
   };
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

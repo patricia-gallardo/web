@@ -87,8 +87,7 @@
   #diff-filenames {
 
     @include left-align(20px);
-    height: 490px;
-    margin: { top: 5px; }
+    height: 500px;
 
     // make scrollbars invisible
     overflow-x: auto;
@@ -101,16 +100,13 @@
     border-bottom-right-radius: 5px;
 
     .filename {
-      // total height has to be the same as
-      // diff-(added/deleted)-line-counts so
-      // they vertically align
-       height: 16px;
-      padding: { right: 3px; top: 0px; bottom: 4px; }
-       border: 1px solid $darker-color;
-       margin: { bottom: 2px; }
+       height: 20px;
+      padding: { left: 3px; top: 0px; bottom: 0px; }
+       border: none; //0px solid $darker-color;
+       margin: { top: 0px; bottom: 0px; }
       // mimic test-page filename-list
-      &[data-filename='stdout'] { margin-top: 20px; }
-      &[data-filename='status'] { margin-bottom: 20px; }
+      &[data-filename='stdout'] { margin-top: 10px; }
+      &[data-filename='status'] { margin-bottom: 10px; }
     }
   }
 
@@ -180,10 +176,6 @@
       background: lighten($darker-color,10%);
       cursor: default;
     }
-
-    // mimic test-page filename-list
-    &[data-filename='stdout'] { margin-top: 20px;  }
-    &[data-filename='status'] { margin-bottom: 20px;  }
   }
 
   .diff-deleted-line-count {

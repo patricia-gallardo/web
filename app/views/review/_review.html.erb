@@ -286,13 +286,18 @@ $(() => {
 
   // - - - - - - - - - - - - - - - - - - - - - - - -
 
+  const outputFilenames = ['stdout','stderr','status'];
+
   const sortedDiffs = (diffs) => {
     let filenames = [];
     $.each(diffs, (_, diff) => {
-      filenames.push(diff.filename);
+      const filename = diff.filename;
+      if (!outputFilenames.includes(filename)) {
+        filenames.push(filename);
+      }
     });
     // ensure filenames appear in the same order as kata/edit page
-    const sorted = ['stdout','stderr','status'].concat(cd.sortedFilenames(filenames));
+    const sorted = outputFilenames.concat(cd.sortedFilenames(filenames));
     const diffFor = (filename) => {
       for (let i = 0; i !== diffs.length; i++) {
         if (diffs[i].filename === filename) {

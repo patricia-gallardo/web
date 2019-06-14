@@ -12,24 +12,6 @@ $(() => {
     return $('#kata-page').length != 0;
   };
 
-  cd.setLimitedView = () => {
-    prevIndexButton().hide();
-    nextIndexButton().hide();
-    diffCheckBoxContainer().hide();
-    forkButton().hide();
-    revertButton().hide();
-    downloadButton().hide();
-  };
-
-  const unsetLimitedView = () => {
-    prevIndexButton().show();
-    nextIndexButton().show();
-    diffCheckBoxContainer().show();
-    forkButton().show();
-    revertButton().show();
-    downloadButton().show();
-  };
-
   // after refresh() has been called param also contains param.events
   let param = {
             id: "<%= @id %>",
@@ -618,7 +600,7 @@ $(() => {
 
   if (inTestPage()) {
     setupButton('resume', () => {
-      unsetLimitedView();
+      $('.full-view').show();
       $('#review-page').hide();
       $('#kata-page').show();
     });
@@ -645,10 +627,10 @@ $(() => {
       </table>
     </td>
     <td>
-      <button id="prev-index" class="triangle button">
+      <button id="prev-index" class="full-view triangle button">
         <img src="/images/triangle_prev.gif" alt="move to previous diff"/>
       </button>
-      <button id="next-index" class="triangle button">
+      <button id="next-index" class="full-view triangle button">
         <img src="/images/triangle_next.gif" alt="move to next diff"/>
       </button>
     </td>
@@ -659,9 +641,9 @@ $(() => {
   <tr valign="top">
     <td align="right" style="width:295px">
       <%= render(:partial => 'review/diff_checkbox') %>
-      <div id="fork-button-box"></div>
-      <div id="revert-button-box"></div>
-      <div id="download-button-box"></div>
+      <div id="fork-button-box" class="full-view"></div>
+      <div id="revert-button-box" class="full-view"></div>
+      <div id="download-button-box" class="full-view"></div>
       <div id="diff-filenames"></div>
     </td>
     <td colspan="2">

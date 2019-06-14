@@ -89,7 +89,7 @@ updateChangedFiles();
 cd.scrollLastTrafficLightIntoView();
 
 cd.openLimitedDiffView = () => {
-  cd.setLimitedView();
+  $('.full-view').hide();
   $('.diff-traffic-light').last().click();
 };
 

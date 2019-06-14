@@ -12,6 +12,24 @@ $(() => {
     return $('#kata-page').length != 0;
   };
 
+  cd.setLimitedView = () => {
+    prevIndexButton().hide();
+    nextIndexButton().hide();
+    diffCheckBoxContainer().hide();
+    forkButton().hide();
+    revertButton().hide();
+    downloadButton().hide();
+  };
+
+  const unsetLimitedView = () => {
+    prevIndexButton().show();
+    nextIndexButton().show();
+    diffCheckBoxContainer().show();
+    forkButton().show();
+    revertButton().show();
+    downloadButton().show();
+  };
+
   // after refresh() has been called param also contains param.events
   let param = {
             id: "<%= @id %>",
@@ -72,6 +90,8 @@ $(() => {
       .unbind('click')
       .bind('click', () => show(param.nowIndex));
   };
+
+  const diffCheckBoxContainer = () => $('#diff-checkbox-container');
 
   const diffCheckBox = () => $('#diff-checkbox');
 
@@ -159,9 +179,13 @@ $(() => {
   //    [<] [>]
   //-----------------------------------------
 
+  const prevIndexButton = () => $('#prev-index');
+
+  const nextIndexButton = () => $('#next-index');
+
   const refreshNavigator = () => {
-    refreshIndex($('#prev-index'), prevEventIndex(param.nowIndex));
-    refreshIndex($('#next-index'), nextEventIndex(param.nowIndex));
+    refreshIndex(prevIndexButton(), prevEventIndex(param.nowIndex));
+    refreshIndex(nextIndexButton(), nextEventIndex(param.nowIndex));
   };
 
   const refreshIndex = (button, index) => {
@@ -479,8 +503,10 @@ $(() => {
   // refresh [fork]
   //-----------------------------------------
 
+  const forkButton = () => $('#fork-button');
+
   const refreshForkButton = () => {
-    const button = $('#fork-button');
+    const button = forkButton();
     cd.setTip(button, () => {
       const tip = `create a new session from this traffic-light's files`;
       cd.showHoverTip(button, tip);
@@ -491,8 +517,10 @@ $(() => {
   // refresh [revert] (from kata/edit page only)
   //-----------------------------------------
 
+  const revertButton = () => $('#revert-button');
+
   const refreshRevertButton = () => {
-    const button = $('#revert-button');
+    const button = revertButton();
     button.prop('disabled', !inTestPage());
     cd.setTip(button, () => {
       const tip = `revert to this traffic-light's files`;
@@ -544,8 +572,10 @@ $(() => {
   // refresh [download]
   //-----------------------------------------
 
+  const downloadButton = () => $('#download-button');
+
   const refreshDownloadButton = () => {
-    const button = $('#download-button');
+    const button = downloadButton();
     // zipper is not yet upgraded to the new saver format
     button.prop('disabled', true);
     cd.setTip(button, () => {
@@ -584,8 +614,11 @@ $(() => {
   setupButton('download', () => doDownload());
   setupButton('fork',     () => cd.forkDialog(param.id, param.nowIndex));
 
+  // - - - - - - - - - - - - - - - - - - - - - - - -
+
   if (inTestPage()) {
     setupButton('resume', () => {
+      unsetLimitedView();
       $('#review-page').hide();
       $('#kata-page').show();
     });

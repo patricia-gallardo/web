@@ -87,3 +87,10 @@ updateChangedFiles();
 //warnIfTruncatedFiles();
 
 cd.scrollLastTrafficLightIntoView();
+
+cd.openLimitedDiffView = () => {
+  cd.setLimitedView();
+  $('.diff-traffic-light').last().click();
+};
+
+cd.openLimitedDiffView();
